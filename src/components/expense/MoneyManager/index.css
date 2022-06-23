@@ -31,11 +31,14 @@
   background: linear-gradient(to right, #92FE9D, #00C9FF); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
   
 }
-
+#searchItem{
+  font-family: 'Roboto';
+  font-size: 10px;
+}
 .heading {
   color: #475569;
   font-family: 'Roboto';
-  font-size: 20px;
+  font-size: 15px;
   font-weight: 500;
   margin-bottom: 16px;
 }
@@ -60,7 +63,9 @@
   width: 100%;
   margin-bottom: 24px;
 }
-
+.searchLine{
+  display: flex;
+}
 
 .transaction-form {
   display: flex;
@@ -83,7 +88,7 @@
 .transaction-header {
   color: #475569;
   font-family: 'Roboto';
-  font-size: 16px;
+  font-size: 13px;
   font-weight: 500;
   line-height: 1.6;
   

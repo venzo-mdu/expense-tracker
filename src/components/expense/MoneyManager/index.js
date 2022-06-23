@@ -26,6 +26,9 @@ export default function MoneyManager() {
   const [amountInput, setAmountInput] = useState("")
   const [titleInput, setTitleInput] = useState("")
   const email =auth.currentUser.email;
+  const [search, setSearch ] =useState('')
+  const [searchFromDate ,setSearchFromDate] =useState([]);
+  const [searchToDate ,setSearchToDate] =useState([]);
 
   const onChangeOptionId = event => {
     setOptionId(event.target.value)
@@ -115,11 +118,31 @@ export default function MoneyManager() {
       setOptionId(transactionTypeOptions[0].optionId)
       setDateInput('')
     }
-  const getTransactions = async () => {
+    const getTransactions = async () => {
       const docref = doc(db, 'expenseTracker', email);
       const querySnapshot = await getDoc(docref);
-      setTransactionsList(querySnapshot.data().trans);
+      // setTransactionsList(querySnapshot.data().trans);
+      const list =querySnapshot.data().trans
+      setTransactionsList(list)
     };
+
+    const getFilterData=()=>{
+      if ((searchFromDate && searchToDate) !=0  && (search.length >0))
+        {
+            return transactionsList.filter (obj => 
+                obj.date >= searchFromDate && obj.uploadedDate <= searchToDate && obj.fileName.toLowerCase().includes(search.toLowerCase()));
+        }
+        else if ((searchFromDate && searchToDate) !=0 ) {
+             return transactionsList.filter (obj => 
+                obj.date >= searchFromDate && obj.date <= searchToDate                         
+            )
+          }else if (search.length >0){
+          return transactionsList.filter(
+              obj => obj.type.optionId.toLowerCase().includes(search.toLowerCase())
+            )
+        }
+    return transactionsList;
+    }
 
     useEffect(() => {
       getTransactions();
@@ -131,11 +154,15 @@ export default function MoneyManager() {
         <div className="responsive-container">
           <div className="header-container">
             <h1 className="heading">Hi,</h1>
+            <div className="searchLine">
+              <input type='text' id="searchItem" placeholder='search' onChange={(e) => setSearch(e.target.value)} /> 
+              <input type="date" dateFormat onChange={e=>setSearchFromDate(e.target.value)}  ></input>
+              <input type="date" onChange={e=>setSearchToDate(e.target.value)}></input>
+            </div>
             <p className="header-content">
               Welcome back to your
               <span className="money-manager-text"> Expense Tracker</span>
             </p>
-
           </div>
           <MoneyDetails
             balanceAmount={getBalance()}
@@ -212,17 +239,16 @@ export default function MoneyManager() {
                     <p className='table-header-cell'>Date</p>
                     <p className='table-header-cell'>Bill</p>
                   </li>
-                  {transactionsList.map(eachTransaction => (
-                    <TransactionItem
-                      key={eachTransaction.id}
-                      transactionDetails={eachTransaction}
-                    />
+                  {getFilterData().map(eachTransaction => (
+                      <TransactionItem
+                        key={eachTransaction.id}
+                        transactionDetails={eachTransaction}
+                      />
                   ))}
 
+
                 </ul>
-
               </div>
-
             </div>
           </div>
         </div>
