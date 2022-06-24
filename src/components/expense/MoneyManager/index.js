@@ -136,7 +136,15 @@ export default function MoneyManager() {
              return transactionsList.filter (obj => 
                 obj.date >= searchFromDate && obj.date <= searchToDate                         
             )
-          }else if (search.length >0){
+          }        else if (searchFromDate  !=0 ) {
+            return transactionsList.filter (obj => 
+               obj.date >= searchFromDate                          
+           )
+         }        else if ( searchToDate !=0 ) {
+          return transactionsList.filter (obj => 
+             obj.date <= searchToDate                         
+         )
+       }else if (search.length >0){
           return transactionsList.filter(
               obj => obj.type.optionId.toLowerCase().includes(search.toLowerCase())
             )
